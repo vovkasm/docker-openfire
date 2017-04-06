@@ -1,12 +1,15 @@
-FROM sameersbn/ubuntu:14.04.20170110
-MAINTAINER sameer@damagehead.com
+FROM ubuntu:trusty
+MAINTAINER vovkasm@gmail.com
 
 ENV OPENFIRE_VERSION=4.1.3 \
     OPENFIRE_USER=openfire \
     OPENFIRE_DATA_DIR=/var/lib/openfire \
     OPENFIRE_LOG_DIR=/var/log/openfire
 
-RUN apt-get update \
+RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends \
+ && echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y vim.tiny wget sudo net-tools ca-certificates unzip apt-transport-https \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-7-jre \
  && wget "http://download.igniterealtime.org/openfire/openfire_${OPENFIRE_VERSION}_all.deb" -O /tmp/openfire_${OPENFIRE_VERSION}_all.deb \
  && dpkg -i /tmp/openfire_${OPENFIRE_VERSION}_all.deb \
